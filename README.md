@@ -8,6 +8,6 @@ Python script for downloading images
 - beautifulsoup
 
 **Supported URLs**
-- [x] http://boards.4chan.org/*board*/thread/*thread number*/*thread name*
+- [x] http://boards.4chan.org/*board*/thread/*threadnumber*/*threadname*
 - [ ] reddit
 - [ ] universal (all <img> tags)
