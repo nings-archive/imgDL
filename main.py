@@ -2,12 +2,12 @@ import requests
 import bs4
 import os
 
-# TODO get URL from input
+# gets URL from input
 def getURL():
     url = input("Enter URL here >>>")
     return url
 
-# TODO get soup object from url
+# gets soup object from url
 def getSoup(url):
     html = requests.get(url)
     print("Retrieving .html...")
@@ -15,8 +15,9 @@ def getSoup(url):
     print("Parsing soup object...")
     return soup
 
-# TODO get img src from soup (obtain a list of urls)
+# gets img src from soup (obtain a list of urls)
 def getsrc(url, soup):
+    # TODO add more URL conditionals
     if '4chan' in url:
         print("Switching to 4chan mode...")
         fileText = soup.select('div .fileText a')
@@ -27,7 +28,7 @@ def getsrc(url, soup):
             imgsrc.append(src)
         return imgsrc
 
-# TODO iterate over list to download images
+# iterates over list to download images
 def download(imgsrc):
     print("Starting downloads...")
     dlcount = 1
@@ -42,6 +43,7 @@ def download(imgsrc):
         dlcount += 1
     print("All downloads complete!")
 
+# TODO make a downloadAll function for ease of use when importing this module
 if __name__ == '__main__':
     url = getURL()
     soup = getSoup(url)
