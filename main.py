@@ -15,8 +15,10 @@ def getSoup(url):
     print("Parsing soup object..."),
     return soup
 
-# function for 4chan
-def changet(url, soup):
+# TODO universal retrieval
+
+# retrieves imgsrc list of img URLS for 4chan
+def chanGet(url, soup):
     print("Switching to 4chan mode..."),
     fileText = soup.select('div .fileText a')
     print("Building image URLs..."),
@@ -25,12 +27,6 @@ def changet(url, soup):
         src = 'http:' + tag.get('href')
         imgsrc.append(src)
     return imgsrc
-
-# gets img src from soup (obtain a list of urls)
-def getsrc(url, soup):
-    # TODO add more URL conditionals
-    if '4chan' in url:
-        return changet(url, soup)
 
 # iterates over list to download images
 def download(imgsrc):
@@ -51,6 +47,7 @@ def download(imgsrc):
 if __name__ == '__main__':
     url = getURL()
     soup = getSoup(url)
-    imgsrc = getsrc(url, soup)
+    if '4chan' in url:
+        imgsrc = chanGet(url, soup)
     download(imgsrc)
-    input("Press enter to exit...")
+    input("Press enter to exit.")
