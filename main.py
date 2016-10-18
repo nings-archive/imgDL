@@ -1,11 +1,12 @@
 import requests
 import bs4
-import os
+
 
 # gets URL from input
 def getURL():
     url = input("Enter URL here >>>")
     return url
+
 
 # gets soup object from url
 def getSoup(url):
@@ -15,6 +16,7 @@ def getSoup(url):
     print("Parsing soup object..."),
     return soup
 
+
 # universal retrieval
 def allGet(url, soup):
     print("Switching to universal mode..."),
@@ -22,13 +24,13 @@ def allGet(url, soup):
     print("Building image URLs...")
     imgsrc = []
     for tag in imgtags:
-        if '.svg' not in tag.get('src'):
-            if 'http' in tag.get('src'):
-                src = tag.get('src')
-            else:
-                src = 'http:' + tag.get('src')
+        if 'http' in tag.get('src'):
+            src = tag.get('src')
+        else:
+            src = 'http:' + tag.get('src')
             imgsrc.append(src)
     return imgsrc
+
 
 # retrieves imgsrc list of img URLS for 4chan
 def chanGet(url, soup):
@@ -41,7 +43,15 @@ def chanGet(url, soup):
         imgsrc.append(src)
     return imgsrc
 
-# TODO sanitises file names for OS module
+
+# sanitises file names for OS module
+def cleanName(filename):
+    exts = ['.jpg', '.jpeg', '.png', '.gif', '.webm', '.tif', '.tiff', '.bmp', '.pbm', '.pgm', '.ppm', '.pnm', '.webp', '.svg']
+    for ext in exts:
+        if ext in filename.lower():
+            filename = filename[:filename.lower().rfind(ext) + len(ext)]
+    return filename
+
 
 # iterates over list to download images
 def download(imgsrc):
@@ -50,8 +60,9 @@ def download(imgsrc):
     for imgurl in imgsrc:
         print("Downloading", str(dlcount), "of", str(len(imgsrc)))
         imgdata = requests.get(imgurl)
-        # TODO catch errors with invalid file names
         filename = imgurl[imgurl.rfind('/') + 1:]
+        # catches errors with invalid file names, often trailing after the extension
+        filename = cleanName(filename)
         imgfile = open(filename, 'wb')
         for chunk in imgdata.iter_content(10000):
             imgfile.write(chunk)
