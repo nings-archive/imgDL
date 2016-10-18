@@ -15,7 +15,7 @@ def getSoup(url):
     print("Parsing soup object..."),
     return soup
 
-# TODO universal retrieval
+# universal retrieval
 def allGet(url, soup):
     print("Switching to universal mode..."),
     imgtags = soup.select('img')
@@ -23,7 +23,10 @@ def allGet(url, soup):
     imgsrc = []
     for tag in imgtags:
         if '.svg' not in tag.get('src'):
-            src = 'http:' + tag.get('src')
+            if 'http' in tag.get('src'):
+                src = tag.get('src')
+            else:
+                src = 'http:' + tag.get('src')
             imgsrc.append(src)
     return imgsrc
 
@@ -38,6 +41,8 @@ def chanGet(url, soup):
         imgsrc.append(src)
     return imgsrc
 
+# TODO sanitises file names for OS module
+
 # iterates over list to download images
 def download(imgsrc):
     print("Starting downloads...")
@@ -45,6 +50,7 @@ def download(imgsrc):
     for imgurl in imgsrc:
         print("Downloading", str(dlcount), "of", str(len(imgsrc)))
         imgdata = requests.get(imgurl)
+        # TODO catch errors with invalid file names
         filename = imgurl[imgurl.rfind('/') + 1:]
         imgfile = open(filename, 'wb')
         for chunk in imgdata.iter_content(10000):
