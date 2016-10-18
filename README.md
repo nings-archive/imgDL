@@ -11,3 +11,6 @@ Python script for downloading images
 - [x] http://boards.4chan.org/*board*/thread/*threadnumber*/*threadname*
 - [ ] reddit
 - [x] universal (all img tags)
+
+**Bugs**
+- [ ] Universal mode only works sometimes, since different sides reference URLs in their img tags differently.
