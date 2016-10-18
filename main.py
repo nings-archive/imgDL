@@ -16,6 +16,16 @@ def getSoup(url):
     return soup
 
 # TODO universal retrieval
+def allGet(url, soup):
+    print("Switching to universal mode..."),
+    imgtags = soup.select('img')
+    print("Building image URLs...")
+    imgsrc = []
+    for tag in imgtags:
+        if '.svg' not in tag.get('src'):
+            src = 'http:' + tag.get('src')
+            imgsrc.append(src)
+    return imgsrc
 
 # retrieves imgsrc list of img URLS for 4chan
 def chanGet(url, soup):
@@ -49,5 +59,7 @@ if __name__ == '__main__':
     soup = getSoup(url)
     if '4chan' in url:
         imgsrc = chanGet(url, soup)
+    else:
+        imgsrc = allGet(url, soup)
     download(imgsrc)
     input("Press enter to exit.")
