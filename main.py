@@ -17,12 +17,14 @@ except ImportError:
     sys.stderr.flush()
     time.sleep(2)
     exit()
+'''
 try:
     import selenium.webdriver as webdriver
 except ImportError:
     sys.stderr.write("ERROR: Selenium is not installed. This is a requirement for imgur links.")
     sys.stderr.flush()
     time.sleep(2)
+'''
 
 # TODO: Clean the code, one function for each site
 # TODO: allow sys.argv
