@@ -29,14 +29,12 @@ except ImportError:
 # TODO: fix errors with unreliable web links, conditionals need to be more strict
 # TODO: change file name, or at least main.exe to imgDL.exe
 
-# gets soup object from url
 def getSoup(url):
     html = requests.get(url)
     soup = bs4.BeautifulSoup(html.text, 'html.parser')
     return soup
 
 
-# universal retrieval
 def getAll(url):
     soup = getSoup(url)
     preimgsrc = []
@@ -44,17 +42,16 @@ def getAll(url):
     imgtags = soup.select('img')
     for tag in imgtags:
         preimgsrc.append(tag.get('src'))
-    # TODO try this with re
-    domain = url[url.find('/') + 2:]
+    domain = url[url.find('/') + 2:] # TODO try this with re
     domain = domain[:domain.find('/')]
-    # '''
+    '''
     atags = soup.select('a')
     for tag in atags:
         if type(tag.get('href')) is str:
+            if ('.jpg' or '.png' or '.jpeg') in tag.get('href'): 
             # TODO expand selection criteria with ext list below
-            if ('.jpg' or '.png' or '.jpeg') in tag.get('href'):
                 preimgsrc.append(tag.get('href'))   
-    # '''
+    '''
     for imgurl in preimgsrc:
         if ('http' or 'https') in imgurl:
             imgsrc.append(imgurl)
@@ -65,26 +62,16 @@ def getAll(url):
     return imgsrc
 
 
-def get4chan(url):
-    print("Identified as 4chan thread.")
-    soup = getSoup(url)
-    selection = soup.select('div .fileText a')
-    imgurls = []
-    for tag in selection:
-        href = 'http:' + tag.get('href')
-        imgurls.append(href)
-    return imgurls
+def getChan(url, soup): # retrieves imgsrc list of img URLS for 4chan
+    fileText = soup.select('div .fileText a')
+    imgsrc = []
+    for tag in fileText:
+        src = 'http:' + tag.get('href')
+        imgsrc.append(src)
+    return imgsrc
 
 
-def getImgur(url):
-    # imgur urls types:
-    # imgur.com/a/abcdef (multi, single)--'div .post-image a', tag.get('href')
-    # imgur.com/gallery/abcdef (multi, single)
-    # imgur.com/abcdef (single)
-    print("Identified as Imgur post.")
-
-
-def cleanName(filename):
+def cleanName(filename): # sanitises file names for OS module
     exts = ['.jpg', '.jpeg', '.png', '.gif', '.webm', '.tif', '.tiff', '.bmp', '.pbm', '.pgm', '.ppm', '.pnm', '.webp', '.svg']
     for ext in exts:
         if ext in filename.lower():
@@ -92,7 +79,6 @@ def cleanName(filename):
     return filename
 
 
-# iterates over list to download images
 def download(imgurls):
     dlcount = 1
     for imgurl in imgurls:
@@ -103,6 +89,7 @@ def download(imgurls):
             for chunk in data.iter_content(10000):
                 imgfile.write(chunk)
         dlcount += 1
+
 
 def main(args):
     if len(args) > 2:
@@ -132,4 +119,3 @@ def main(args):
         os.chdir('..')
 
 main(sys.argv)
-

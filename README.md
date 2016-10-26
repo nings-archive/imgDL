@@ -15,8 +15,9 @@ Supported URLs will yield more optimised downloads. (e.g. links to 4chan threads
 
 **Supported URLs**
 - [x] http://boards.4chan.org/*board*/thread/*threadnumber*/*threadname*
-- [ ] reddit
 - [x] universal (all img tags) -> (all img tags and a tags linking to .jpg, .png, .or .jpeg)
+- [ ] imgur
+- [ ] reddit
 
 **Bugs**
 - [X] *(Fixed!)* Universal mode only works sometimes, since different sites reference URLs in their img tags differently.
